@@ -61,6 +61,7 @@ body{
     border-radius: .5em;
     color: white;
     font-weight: bold;
+    cursor: pointer;
 }
 
 .navcolor{
@@ -80,6 +81,10 @@ form > h4{
     width: 100%;
 }
 
+.input-registro:disabled{
+    color: white !important;
+}
+
 .globo{
     margin-top: 60px;
     padding: 20px;
@@ -95,6 +100,11 @@ form > h4{
     margin: 3px 0;
 }
 
+.globo > a{
+    color: white;
+    font-weight: bold;
+}
+
 .dropdown-content > li > span{
     color: white !important;
 }
@@ -106,6 +116,7 @@ form>.col>button{
     font-weight: bold;
     border-radius: .5em;
     height: 40px;
+    cursor: pointer;
 }
 
 .input-registro::placeholder{
@@ -127,4 +138,50 @@ form>.col>button{
         width: 90%;
         padding: 0;
     }
+}
+
+.info-usuario{
+    margin: 0 40px !important;
+}
+
+@media (max-width:600px) {
+    .info-usuario{
+        margin: 60px 0 !important;
+    }
+}
+
+/* DATATABLE */
+
+.title{
+    font-weight: bold;
+    margin-bottom: -50px;
+}
+
+@media (max-width:670px) {
+    .title-table{
+        margin-bottom: 0;
+    }
+}
+
+.table-head{
+    background: linear-gradient(90deg, rgb(3, 0, 163) 25%, rgb(5, 40, 241) 100%);
+    color: white;
+}
+
+#tabla_filter > label{
+    color: black !important;
+    font-weight: bold !important;
+}
+
+label > input{
+    border: 2px solid black !important;
+}
+
+#tabla_filter > label > input{
+    height: 30px;
+    width: 80%;
+}
+
+#tabla_length{
+    display: none;
 }

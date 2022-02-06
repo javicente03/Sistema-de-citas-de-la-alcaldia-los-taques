@@ -1,5 +1,11 @@
+<?php 
+    session_start();
+    if(isset($_SESSION["id"]))
+        header("Location: cita.php");
+?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -31,51 +37,40 @@
         <div class="col s12 m4 center">
             <img src="img/usuarios.png" height="250px" width="250px" class="responsive-img" alt="">
         </div>
-        <div class="col s12 m4 hide-on-med-and-down"></div>
+        <div class="col s12 m4">
+            <p class="globo" style="height: initial;">La contraseña solo debe contener letras y números con una longitud de entre 8 y 12 caracteres</p>
+        </div>
     </div>
     <div class="contenedor-center">
         <div class="row center">
-            <form action="">
+            <form id="form">
 
                 <h4>Registro de Usuario</h4>
                 <div class="col s12">
-                    <input type="text" class="input-registro" placeholder="Nombre completo">
+                    <input type="text" name="nombre" class="input-registro" placeholder="Nombre completo">
                 </div>
                 <div class="col s12">
-                    <input type="text" class="input-registro" placeholder="Cédula">
+                    <input type="number" name="cedula" class="input-registro" placeholder="Cédula">
                 </div>
                 <div class="col s12">
-                    <input type="text" class="input-registro" placeholder="Correo Electrónico">
+                    <input type="email" name="email" class="input-registro" placeholder="Correo Electrónico">
                 </div>
                 <div class="col s12">
-                    <input type="password" class="input-registro" placeholder="Contraseña">
+                    <input type="password" name="password" class="input-registro" placeholder="Contraseña">
                 </div>
                 <div class="col s12">
-                    <input type="password" class="input-registro" placeholder="Por favor confirme su contraseña">
+                    <input type="password" name="confirm" class="input-registro" placeholder="Por favor confirme su contraseña">
                 </div>
                 <div class="col s12">
-                    <select name="" id="">
-                        <option value="">Seleccione su lugar de residencia</option>
-                        <option value="">Seleccione su lugar de residencia</option>
-
-                        <option value="">Seleccione su lugar de residencia</option>
-                        <option value="">Seleccione su lugar de residencia</option>
-                        <option value="">Seleccione su lugar de residencia</option>
-                        <option value="">Seleccione su lugar de residencia</option>
-                        <option value="">Seleccione su lugar de residencia</option>
-                        <option value="">Seleccione su lugar de residencia</option>
-                        <option value="">Seleccione su lugar de residencia</option>
-                        <option value="">Seleccione su lugar de residencia</option>
-                        <option value="">Seleccione su lugar de residencia</option>
-                        <option value="">Seleccione su lugar de residencia</option>
-                        <option value="">Seleccione su lugar de residencia</option>
-                        <option value="">Seleccione su lugar de residencia</option>
-
+                    <select name="direccion" id="direccion">
+                        <option value="" selected disabled>Seleccione su lugar de residencia</option>
+                        <option value="Villa Marina">Villa Marina</option>
                     </select>
                 </div>
                 <div class="col s12 center">
-                    <button>Registrar Usuario</button>
+                    <button id="btn-submit" type="submit">Registrar Usuario</button>
                 </div>
+                <input type="hidden" name="token" value="token">
                 <a href="login.php" style="color: black;font-weight: bold;">¿Ya estás registrado? Inicia Sesión</a>
             </form>
         </div>
@@ -84,6 +79,29 @@
     <script src="js/jquery-3.6.0.min.js"></script>
     <script src="js/materialize.min.js"></script>
     <script src="js/elementos_materialize.js"></script>
-</body>
 
+    <script>
+        $("#form").submit(function(e){
+            $("#btn-submit").prop("disabled", true)
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: 'logica/registro.php',
+                data: $(this).serialize(),
+                enctype: 'application/x-www-form-urlencoded',
+                success: function(response) {
+                    if (response == "ok") {
+                        location.href = "cita.php"
+                    } else {
+                        M.toast({
+                            html: response,
+                            classes: 'rounded red'
+                        })
+                        $("#btn-submit").prop("disabled", false)
+                    }
+                }
+            });
+        })
+    </script>
+</body>
 </html>

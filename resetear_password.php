@@ -1,5 +1,10 @@
+<?php 
+    session_start();
+    if(isset($_SESSION["id"]))
+        header("Location: cita.php");
+?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -14,12 +19,9 @@
     <nav>
         <div class="nav-wrapper navcolor fixed">
             <div class="container">
-                <a href="registro.php" class="brand-logo texto-logo">Solicitudes</a>
-
-
-
+                <a href="login.php" class="brand-logo texto-logo">Solicitudes</a>
                 <ul class="right hide-on-med-and-down">
-                    <li><a href="registro.php">Iniciar Sesión</a></li>
+                    <li><a href="login.php">Iniciar Sesión</a></li>
                 </ul>
             </div>
         </div>
@@ -35,18 +37,21 @@
     </div>
     <div class="contenedor-center">
         <div class="row center">
-            <form action="">
+            <form id="form">
                 <div class="col s12">
-                    <input type="text" class="input-registro" placeholder="Ingrese el código de seguridad">
+                    <input type="text" name="token" class="input-registro" placeholder="Ingrese el código de seguridad">
                 </div>
                 <div class="col s12">
-                    <input type="password" class="input-registro" placeholder="Ingrese su nueva contraseña">
+                    <input type="password" name="password" class="input-registro" placeholder="Ingrese su nueva contraseña">
                 </div>
                 <div class="col s12">
-                    <input type="password" class="input-registro" placeholder="Confirme su contraseña">
+                    <input type="password" name="confirm" class="input-registro" placeholder="Confirme su contraseña">
                 </div>
                 <div class="col s12 center">
-                    <button>Validar</button>
+                    <button id="btn-submit">Validar</button>
+                    <div class="progress indigo darken-4" id="progress" style="display: none;">
+                        <div class="indeterminate"></div>
+                    </div>
                 </div>
             </form>
         </div>
@@ -54,6 +59,38 @@
 
     <script src="js/jquery-3.6.0.min.js"></script>
     <script src="js/materialize.min.js"></script>
+
+    <script>
+        $('#form').submit(function(e) {
+            $("#progress").css("display", "block")
+            $("#btn-submit").prop("disabled", true)
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: 'logica/resetear_password.php',
+                data: $(this).serialize(),
+                enctype: 'application/x-www-form-urlencoded',
+                success: function(response) {
+                    if (response == "ok") {
+                        M.toast({
+                            html: 'Su contraseña ha sido reestablecida',
+                            classes: 'rounded green'
+                        })
+                        setTimeout(() => {
+                            location.href = "login.php"
+                        }, 3000);
+                    } else {
+                        M.toast({
+                            html: response,
+                            classes: 'rounded red'
+                        })
+                        $("#progress").css("display", "none")
+                        $("#btn-submit").prop("disabled", false)
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

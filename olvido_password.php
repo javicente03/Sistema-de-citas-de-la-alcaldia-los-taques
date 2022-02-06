@@ -1,5 +1,10 @@
+<?php 
+    session_start();
+    if(isset($_SESSION["id"]))
+        header("Location: cita.php");
+?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -14,7 +19,7 @@
     <nav>
         <div class="nav-wrapper navcolor fixed">
             <div class="container">
-                <a href="registro.php" class="brand-logo texto-logo">Solicitudes</a>
+                <a href="login.php" class="brand-logo texto-logo">Solicitudes</a>
 
                 <ul class="right hide-on-med-and-down">
                     <li><a href="login.php">Iniciar Sesión</a></li>
@@ -33,19 +38,48 @@
     </div>
     <div class="contenedor-center">
         <div class="row center">
-            <form action="">
+            <form id="form">
                 <div class="col s12">
-                    <input type="text" class="input-registro" placeholder="Ingrese su Correo Electrónico">
+                    <input type="email" name="email" class="input-registro" placeholder="Ingrese su Correo Electrónico">
                 </div>
                 <div class="col s12 center">
-                    <button>Enviar código</button>
+                    <button type="submit" id="btn-submit">Enviar código</button>
+                    <div class="progress indigo darken-4" id="progress" style="display: none;">
+                        <div class="indeterminate"></div>
+                    </div>
                 </div>
+                <input type="hidden" name="token" value="token">
             </form>
         </div>
     </div>
 
     <script src="js/jquery-3.6.0.min.js"></script>
     <script src="js/materialize.min.js"></script>
+    <script>
+        $('#form').submit(function(e) {
+            $("#btn-submit").prop("disabled", true)
+            $("#progress").css("display", "block")
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: 'logica/olvido_password.php',
+                data: $(this).serialize(),
+                enctype: 'application/x-www-form-urlencoded',
+                success: function(response) {
+                    if (response.substring(response.length - 2, response.length) == "ok"){
+                        location.href = "resetear_password.php"
+                    } else {
+                        M.toast({
+                            html: response,
+                            classes: 'rounded red'
+                        })
+                        $("#btn-submit").prop("disabled", false)
+                        $("#progress").css("display", "none")
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

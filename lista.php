@@ -1,5 +1,20 @@
+<?php
+session_start();
+if (!isset($_SESSION["id"]))
+    header("Location: login.php");
+else {
+    if (!$_SESSION["permisos"])
+        header("Location: cita.php");
+
+    $token = true;
+    include("logica/conectar.php");
+    $citas = $con->query("SELECT * FROM cita C INNER JOIN usuario U
+    ON C.id_usuario = U.id_usuario WHERE atendido = false");
+}
+?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -8,15 +23,19 @@
     <title>Document</title>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/materialize.min.css">
-    <link href="css/fontawesome-free-6.0.0-beta3-web/css/all.css" rel="stylesheet"> <!--load all styles -->
+    <link href="css/fontawesome-free-6.0.0-beta3-web/css/all.css" rel="stylesheet">
+    <!--load all styles -->
 </head>
 
 <body>
     <nav>
         <div class="nav-wrapper navcolor fixed">
             <div class="container">
-                <a href="login.php" class="brand-logo texto-logo">Solicitudes</a>
+                <a href="lista.php" class="brand-logo texto-logo">Solicitudes</a>
                 <ul class="right hide-on-med-and-down">
+                    <li><a>Bienvenido <?php echo $_SESSION["nombre"] ?></a></li>
+                    <li><a href="lista.php">Revisar Citas</a></li>
+                    <li><a href="lista_usuarios.php">Ver usuarios</a></li>
                     <li><a href="logica/logout.php">Salir</a></li>
                 </ul>
             </div>
@@ -34,50 +53,56 @@
         </div>
     </div>
 
-    <div class="contenedor-center citas row">
-        <div class="col s12 m11">
-            <p class="globo">Nombre: Josué Vasquez | Día: 13 Agosto | Hora: 08:00 am</p>
-        </div>
-        <div class="col s12 m1 center">
-            <button class="check"><i class="fas fa-check"></i></button>
-        </div>
-        <div class="col s12 m11">
-            <p class="globo">Nombre: Josué Vasquez | Día: 13 Agosto | Hora: 08:00 am</p>
-        </div>
-        <div class="col s12 m1 center">
-            <button class="check"><i class="fas fa-check"></i></button>
-        </div>
-        <div class="col s12 m11">
-            <p class="globo">Nombre: Josué Vasquez | Día: 13 Agosto | Hora: 08:00 am</p>
-        </div>
-        <div class="col s12 m1 center">
-            <button class="check"><i class="fas fa-check"></i></button>
-        </div>
-        <div class="col s12 m11">
-            <p class="globo">Nombre: Josué Vasquez | Día: 13 Agosto | Hora: 08:00 am</p>
-        </div>
-        <div class="col s12 m1 center">
-            <button class="check"><i class="fas fa-check"></i></button>
-        </div>
-        <div class="col s12 m11">
-            <p class="globo">Nombre: Josué Vasquez | Día: 13 Agosto | Hora: 08:00 am</p>
-        </div>
-        <div class="col s12 m1 center">
-            <button class="check"><i class="fas fa-check"></i></button>
-        </div>
-        <div class="col s12 m11">
-            <p class="globo">Nombre: Josué Vasquez | Día: 13 Agosto | Hora: 08:00 am</p>
-        </div>
-        <div class="col s12 m1 center">
-            <button class="check"><i class="fas fa-check"></i></button>
-        </div>
-
+    <div id="contenedor" class="contenedor-center citas row" style="max-height: 350px;height: initial;">
+        <?php while ($row = $citas->fetch_assoc()) { ?>
+            <div class="col s12 m11" id="globo<?php echo $row["id_cita"] ?>">
+                <p class="globo"><a href="ver_usuario.php?id=<?php echo $row["id_usuario"] ?>" title="Ver detalle">
+                        Nombre: <?php echo $row["nombre"] ?> | Día: <?php echo $row["fecha"] ?> | Hora: <?php echo $row["hora"] ?></a></p>
+            </div>
+            <div class="col s12 m1 center" id="boton<?php echo $row["id_cita"] ?>">
+                <button class="check" onclick="marcar(<?php echo $row['id_cita']; ?>)" title="Marcar como atendido"><i class="fas fa-check"></i></button>
+            </div>
+        <?php } ?>
     </div>
 
     <script src="js/jquery-3.6.0.min.js"></script>
     <script src="js/materialize.min.js"></script>
     <script src="js/elementos_materialize.js"></script>
     <script>
+        function marcar(id) {
+            var option = "¿Seguro desea proceder?"
+            if (confirm(option)) {
+                var formData = new FormData()
+                formData.append('id', id)
+                formData.append('token', 'token')
+                event.preventDefault();
+                $.ajax({
+                    type: "POST",
+                    url: 'logica/marcar_atendido.php',
+                    data: formData,
+                    enctype: 'application/x-www-form-urlencoded',
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        if (response == "ok") {
+                            M.toast({
+                                html: "Atendido",
+                                classes: 'rounded green'
+                            })
+                            var globo = document.getElementById("globo" + id)
+                            var boton = document.getElementById("boton" + id)
+                            document.getElementById("contenedor").removeChild(globo)
+                            document.getElementById("contenedor").removeChild(boton)
+                        } else {
+                            M.toast({
+                                html: response,
+                                classes: 'rounded red'
+                            })
+                        }
+                    }
+                });
+            }
+        }
     </script>
 </body>
 

@@ -1,11 +1,16 @@
+<?php 
+    session_start();
+    if(isset($_SESSION["id"]))
+        header("Location: cita.php");
+?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Sistema de Citas | Inicio de Sesión</title>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/materialize.min.css">
 </head>
@@ -14,7 +19,7 @@
     <nav>
         <div class="nav-wrapper navcolor fixed">
             <div class="container">
-                <a href="registro.php" class="brand-logo texto-logo">Solicitudes</a>
+                <a href="login.php" class="brand-logo texto-logo">Solicitudes</a>
 
 
 
@@ -35,15 +40,16 @@
     </div>
     <div class="contenedor-center">
         <div class="row center">
-            <form action="">
+            <form id="form">
+                <input type="hidden" name="token" value="token">
                 <div class="col s12">
-                    <input type="text" class="input-registro" placeholder="Correo Electrónico">
+                    <input type="email" class="input-registro" name="email" placeholder="Correo Electrónico">
                 </div>
                 <div class="col s12">
-                    <input type="password" class="input-registro" placeholder="Contraseña">
+                    <input type="password" class="input-registro" name="password" placeholder="Contraseña">
                 </div>
                 <div class="col s12 center">
-                    <button>Iniciar Sesión</button>
+                    <button id="btn-submit">Iniciar Sesión</button>
                 </div>
                 <div class="col s12">
                     <a href="registro.php" style="color: black;font-weight: bold;">¿Aún no tienes cuenta? Regístrate</a>
@@ -57,6 +63,29 @@
 
     <script src="js/jquery-3.6.0.min.js"></script>
     <script src="js/materialize.min.js"></script>
-</body>
 
+    <script>
+        $("#form").submit(function(e){
+            $("#btn-submit").prop("disabled", true)
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: 'logica/login.php',
+                data: $(this).serialize(),
+                enctype: 'application/x-www-form-urlencoded',
+                success: function(response) {
+                    if (response == "ok") {
+                        location.href = "cita.php"
+                    } else {
+                        M.toast({
+                            html: response,
+                            classes: 'rounded red'
+                        })
+                        $("#btn-submit").prop("disabled", false)
+                    }
+                }
+            });
+        })
+    </script>
+</body>
 </html>
