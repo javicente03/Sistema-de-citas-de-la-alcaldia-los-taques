@@ -9,7 +9,7 @@ else {
     $token = true;
     include("logica/conectar.php");
     $citas = $con->query("SELECT * FROM cita C INNER JOIN usuario U
-    ON C.id_usuario = U.id_usuario WHERE atendido = false");
+    ON C.id_usuario = U.id_usuario WHERE atendido = false ORDER BY fecha DESC");
 }
 ?>
 
@@ -20,7 +20,7 @@ else {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Alcaldía de Los Taques | Citas Pendientes</title>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/materialize.min.css">
     <link href="css/fontawesome-free-6.0.0-beta3-web/css/all.css" rel="stylesheet">
@@ -39,8 +39,15 @@ else {
                     <li><a href="logica/logout.php">Salir</a></li>
                 </ul>
             </div>
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger right"><i class="fas fa-bars"></i></a>
         </div>
     </nav>
+    <ul class="sidenav" id="mobile-demo">
+        <li><a>Bienvenido <?php echo $_SESSION["nombre"] ?></a></li>
+        <li><a href="lista.php">Revisar Citas</a></li>
+        <li><a href="lista_usuarios.php">Ver usuarios</a></li>
+        <li><a href="logica/logout.php">Salir</a></li>
+    </ul>
     <div class="row contenedor">
         <div class="col s12 m4">
             <img src="img/logo.png" class="responsive-img" alt="">
@@ -55,8 +62,8 @@ else {
 
     <div id="contenedor" class="contenedor-center citas row" style="max-height: 350px;height: initial;">
         <?php while ($row = $citas->fetch_assoc()) { ?>
-            <div class="col s12 m11" id="globo<?php echo $row["id_cita"] ?>">
-                <p class="globo"><a href="ver_usuario.php?id=<?php echo $row["id_usuario"] ?>" title="Ver detalle">
+            <div class="col s12 m11" id="globo<?php echo $row["id_cita"] ?>" title="<?php echo $row["motivo"] ?>">
+                <p class="globo"><a href="ver_cita.php?id=<?php echo $row["id_cita"] ?>" title="Ver detalle">
                         Nombre: <?php echo $row["nombre"] ?> | Día: <?php echo $row["fecha"] ?> | Hora: <?php echo $row["hora"] ?></a></p>
             </div>
             <div class="col s12 m1 center" id="boton<?php echo $row["id_cita"] ?>">

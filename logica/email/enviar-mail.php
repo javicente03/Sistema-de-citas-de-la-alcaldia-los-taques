@@ -50,7 +50,7 @@ $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
 $mail->SMTPAuth = true;
 
 //Username to use for SMTP authentication - use full email address for gmail
-$mail->Username = 'javicentego@gmail.com';
+$mail->Username = 'citas.alcaldia.los.taques@gmail.com';
 
 //Password to use for SMTP authentication
 $mail->Password = 'javileon03*';
@@ -59,11 +59,11 @@ $mail->Password = 'javileon03*';
 //Note that with gmail you can only use your account address (same as `Username`)
 //or predefined aliases that you have configured within your account.
 //Do not use user-submitted addresses in here
-$mail->setFrom('javicentego@gmail.com', 'Alcaldia de Los Taques');
+$mail->setFrom('citas.alcaldia.los.taques@gmail.com', 'Alcaldia de Los Taques');
 
 //Set an alternative reply-to address
 //This is a good place to put user-submitted addresses
-$mail->addReplyTo('javicentego@gmail.com', 'First Last');
+$mail->addReplyTo('citas.alcaldia.los.taques@gmail.com', 'First Last');
 
 //Set who the message is to be sent to
 $mail->addAddress($email, $nombre);

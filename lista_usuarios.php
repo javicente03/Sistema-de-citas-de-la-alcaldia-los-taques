@@ -9,7 +9,6 @@ else {
     $token = true;
     include("logica/conectar.php");
     $usuarios = $con->query("SELECT * FROM usuario");
-
 }
 ?>
 
@@ -20,7 +19,7 @@ else {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Alcaldía de Los Taques | Lista de Usuarios</title>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/materialize.min.css">
     <link rel="stylesheet" href="css/datatables.min.css">
@@ -40,8 +39,15 @@ else {
                     <li><a href="logica/logout.php">Salir</a></li>
                 </ul>
             </div>
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger right"><i class="fas fa-bars"></i></a>
         </div>
     </nav>
+    <ul class="sidenav" id="mobile-demo">
+        <li><a>Bienvenido <?php echo $_SESSION["nombre"] ?></a></li>
+        <li><a href="lista.php">Revisar Citas</a></li>
+        <li><a href="lista_usuarios.php">Ver usuarios</a></li>
+        <li><a href="logica/logout.php">Salir</a></li>
+    </ul>
     <div class="row contenedor">
         <div class="col s12 m4">
             <img src="img/logo.png" class="responsive-img" alt="">
@@ -55,7 +61,7 @@ else {
     <div class="container">
         <div class="row">
             <h5 class="title title-table">Usuarios</h5>
-            <table id="tabla" class="striped center">
+            <table id="tabla" class="striped centered responsive-table">
                 <thead class="table-head">
                     <th>Nombre</th>
                     <th>Cédula</th>
@@ -64,12 +70,14 @@ else {
                     <th></th>
                 </thead>
                 <tbody>
-                    <?php while($row = $usuarios->fetch_assoc()){ ?>
-                    <td><?php echo $row["nombre"] ?></td>
-                    <td><?php echo $row["cedula"] ?></td>
-                    <td><?php echo $row["email"] ?></td>
-                    <td><?php echo $row["direccion"] ?></td>
-                    <td><a class="btn btn-flat" href="ver_usuario.php?id=<?php echo $row["id_usuario"] ?>"><i class="fas fa-eye"></i></a></td>
+                    <?php while ($row = $usuarios->fetch_assoc()) { ?>
+                        <tr>
+                            <td><?php echo $row["nombre"] ?></td>
+                            <td><?php echo $row["cedula"] ?></td>
+                            <td><?php echo $row["email"] ?></td>
+                            <td><?php echo $row["direccion"] ?></td>
+                            <td><a class="btn btn-flat" href="ver_usuario.php?id=<?php echo $row["id_usuario"] ?>"><i class="fas fa-eye"></i></a></td>
+                        </tr>
                     <?php } ?>
                 </tbody>
             </table>

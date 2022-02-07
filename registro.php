@@ -11,7 +11,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Alcaldía de Los Taques | Registro</title>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/materialize.min.css">
 </head>
@@ -63,7 +63,19 @@
                 </div>
                 <div class="col s12">
                     <select name="direccion" id="direccion">
-                        <option value="" selected disabled>Seleccione su lugar de residencia</option>
+                        <option value="" selected disabled>Seleccione su comunidad</option>
+                        <option value="Alí Primera">Alí Primera</option>
+                        <option value="Amuay">Amuay</option>
+                        <option value="Creolandia">Creolandia</option>
+                        <option value="Cumajacoa">Cumajacoa</option>
+                        <option value="El Hoyito">El Hoyito</option>
+                        <option value="El Oasis">El Oasis</option>
+                        <option value="El Tacal">El Tacal</option>
+                        <option value="Guanadito">Guanadito</option>
+                        <option value="Jayana">Jayana</option>
+                        <option value="Judibana">Judibana</option>
+                        <option value="Parque Residencial Nueva Jayana">Parque Residencial Nueva Jayana</option>
+                        <option value="Santa Cruz de Los Taques">Santa Cruz de Los Taques</option>
                         <option value="Villa Marina">Villa Marina</option>
                     </select>
                 </div>

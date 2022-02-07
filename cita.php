@@ -11,9 +11,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Alcaldía de Los Taques | Agendar Cita</title>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/materialize.min.css">
+    <link href="css/fontawesome-free-6.0.0-beta3-web/css/all.css" rel="stylesheet">
 </head>
 
 <body>
@@ -30,8 +31,17 @@
                     <li><a href="logica/logout.php">Salir</a></li>
                 </ul>
             </div>
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger right"><i class="fas fa-bars"></i></a>
         </div>
     </nav>
+    <ul class="sidenav" id="mobile-demo">
+        <li><a>Bienvenido <?php echo $_SESSION["nombre"] ?></a></li>
+        <?php if($_SESSION["permisos"]){ ?>
+        <li><a href="lista.php">Revisar Citas</a></li>
+        <li><a href="lista_usuarios.php">Ver usuarios</a></li>
+        <?php } ?>
+        <li><a href="logica/logout.php">Salir</a></li>
+    </ul>
     <div class="row contenedor">
         <div class="col s12 m4">
             <img src="img/logo.png" class="responsive-img" alt="">
@@ -60,7 +70,11 @@
                     </select>
                 </div>
                 <div class="col s12 m4">
-                    <button type="submit" id="btn-submit">Agendar Citas</button>
+                    <button type="submit" style="width: 100%;" id="btn-submit">Agendar Citas</button>
+                </div>
+                <div class="col s12 input-field">
+                    <textarea name="motivo" data-length="500" id="motivo" placeholder="Por favor detalle el motivo de su solicitud" required class="input-registro materialize-textarea validate"></textarea>
+                    <span class="helper-text" data-error="Este dato es requerido y no debe exceder los 500 caracteres" data-success=""></span>
                 </div>
             </form>
         </div>
@@ -70,6 +84,10 @@
     <script src="js/materialize.min.js"></script>
     <script src="js/elementos_materialize.js"></script>
     <script>
+        $(document).ready(function() {
+            $('#motivo').characterCounter();
+        });
+
         $("#form").submit(function(e){
             $("#btn-submit").prop("disabled", true)
             e.preventDefault();
@@ -85,6 +103,7 @@
                             classes: 'rounded green'
                         })
                         $("#btn-submit").prop("disabled", false)
+                        document.getElementById("form").reset()
                     } else {
                         M.toast({
                             html: response,

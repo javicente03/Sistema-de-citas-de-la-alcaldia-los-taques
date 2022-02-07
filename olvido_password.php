@@ -10,7 +10,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Alcaldía de Los Taques | Olvidó su contraseña</title>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/materialize.min.css">
 </head>
@@ -34,7 +34,9 @@
         <div class="col s12 m4 center">
             <img src="img/email.png" height="250px" width="250px" class="responsive-img" alt="">
         </div>
-        <div class="col s12 m4 hide-on-med-and-down"></div>
+        <div class="col s12 m4">
+            <p class="globo">Recuerde revisar su buzón de span</p>
+        </div>
     </div>
     <div class="contenedor-center">
         <div class="row center">

@@ -13,12 +13,13 @@ else {
 
     $token = true;
     include("logica/conectar.php");
-    $usuario = ($con->query("SELECT * FROM usuario WHERE id_usuario = $id"))->fetch_assoc();
+    $cita = ($con->query("SELECT * FROM cita C INNER JOIN usuario U
+    ON C.id_usuario = U.id_usuario WHERE id_cita = $id"))->fetch_assoc();
 
-    if (!$usuario)
+    if (!$cita)
         header("Location: error.php");
 
-    $citas = $con->query("SELECT * FROM cita WHERE id_usuario = $id ORDER BY fecha DESC");
+    $citas = $con->query("SELECT * FROM cita WHERE id_usuario = $id");
 }
 ?>
 
@@ -29,7 +30,7 @@ else {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alcaldía de Los Taques | Revisar Usuario</title>
+    <title>Alcaldía de Los Taques | Revisar Cita</title>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/materialize.min.css">
     <link rel="stylesheet" href="css/datatables.min.css">
@@ -63,8 +64,8 @@ else {
             <img src="img/logo.png" class="responsive-img" alt="">
         </div>
         <div class="col s12 m4 center">
-            <img src="img/persona.png" height="250px" width="250px" class="responsive-img" alt="">
-            <h5 class="title">Citas solicitadas</h5>
+            <img src="img/agenda.png" height="250px" width="250px" class="responsive-img" alt="">
+            <h5 class="title">Detalles de la cita</h5>
         </div>
         <div class="col s12 m4 hide-on-med-and-down"></div>
     </div>
@@ -73,49 +74,37 @@ else {
         <div class="col s12 m6">
             <div class="row center">
                 <div class="col s12">
-                    <input type="text" disabled value="<?php echo $usuario["nombre"] ?>" class="input-registro" placeholder="Nombre completo">
+                    <input type="text" disabled value="<?php echo $cita["nombre"] ?>" class="input-registro">
                 </div>
                 <div class="col s12">
-                    <input type="text" disabled value="<?php echo $usuario["cedula"] ?>" class="input-registro" placeholder="Cédula">
+                    <input type="text" disabled value="<?php echo $cita["cedula"] ?>" class="input-registro">
                 </div>
                 <div class="col s12">
-                    <input type="text" disabled value="<?php echo $usuario["email"] ?>" class="input-registro" placeholder="Correo Electrónico">
+                    <input type="text" disabled value="<?php echo $cita["email"] ?>" class="input-registro">
                 </div>
                 <div class="col s12">
-                    <input type="text" disabled value="<?php echo $usuario["direccion"] ?>" class="input-registro" placeholder="Contraseña">
+                    <input type="text" disabled value="<?php echo $cita["direccion"] ?>" class="input-registro">
+                </div>
+                <div class="col s12">
+                    <a class="boton-regular" href="ver_usuario.php?id=<?php echo $cita["id_usuario"] ?>">Ver usuario</a>
                 </div>
             </div>
         </div>
-        <?php if($citas->num_rows > 0){ ?>
-        <div class="col s12 m6 row citas" style="max-height: 200px;height: initial;margin-top: 0;">
-            <?php while ($row = $citas->fetch_assoc()) { ?>
+        <div class="col s12 m6">
+            <div class="row center">
                 <div class="col s12">
-                    <p class="globo"><a href="ver_cita.php?id=<?php echo $row["id_cita"] ?>" title="Ver detalle">
-                        Día: <?php echo $row["fecha"] ?> | Hora: <?php echo $row["hora"] ?></a></p>
+                    <input type="text" disabled value="<?php echo $cita["fecha"] ?>" class="input-registro">
                 </div>
-            <?php } ?>
-        </div>
-        <?php } else { ?>
-            <h6 class="title">No ha solicitado ninguna cita</h6>
-        <?php } ?>
-    </div>
-
-    <div class="container">
-    <?php if ($usuario["super_usuario"]) { ?>
-                    <h5 class="title" style="text-align: center;">Quitar permisos de Super Usuario</h5>
-                <?php } else { ?>
-                    <h5 class="title" style="text-align: center;">Indicar como nuevo Super Usuario</h5>
-                <?php } ?>
-        <div class="row" style="padding: 10px;">
-        
-            <form id="formAdministrador">
-                <div class="col s12 m8">
-                    <input type="password" name="password" class="input-registro" id="password" placeholder="Ingrese su clave de seguridad">
+                <div class="col s12">
+                    <input type="text" disabled value="<?php echo $cita["hora"] ?>" class="input-registro">
                 </div>
-                <input type="hidden" name="usuario_cargo" value="<?php echo $id ?>">
-                <input type="hidden" name="token" value="token">
-                <div class="col s12 m4"><button type="submit" style="width: 100;" id="btn-submit">Modificar</button></div>
-            </form>
+                <div class="col s12">
+                    <input type="text" disabled value="<?php if($cita["atendido"])echo 'Atendida'; else echo 'En proceso'; ?>" class="input-registro">
+                </div>
+                <div class="col s12">
+                    <textarea disabled class="input-registro materialize-textarea" ><?php echo $cita["motivo"] ?></textarea>
+                </div>
+            </div>
         </div>
     </div>
 
